@@ -57,22 +57,48 @@ app.set('view engine', 'ejs');
 
 
 
-app.get('/', (req, res) => {
+
+
+
+
+    app.get('/', (req, res) => {
  
         
-  
-        res.render('login');
+       
+        res.render('blog');
         
        
 
 
            });
 
+           app.get('/login', (req, res) => {
+ 
+        
+       
+            res.render('login');
+            
+           
+    
+    
+               });
+
+               app.get('/postagens', (req, res) => {
+ 
+        
+       
+                res.render('postagens');
+                
+               
+        
+        
+                   });
+
 
 app.post('/login', (req, res) => {
 const { nome, senha } = req.body;
 
-const query = 'SELECT * FROM login WHERE nome = ? AND senha = ?';
+const query = 'SELECT * FROM cliente WHERE nome = ? AND senha = ?';
 
 db.query(query, [nome, senha], (err, results) => {
 if (err) throw err;
@@ -80,19 +106,18 @@ if (err) throw err;
 if (results.length > 0) {
 req.session.loggedin = true;
 req.session.nome = nome;
-res.redirect('/postagens');
+res.redirect('/');
 
 
 
-//
-//
+
 // CREATE
 app.post('/add', (req, res) => {
- const { name } = req.body;
+  const { name } = req.body;
   const sql = 'INSERT INTO postg (name) VALUES (?)';
   db.query(sql, [name], (err, result) => {
     if (err) throw err;
-    res.redirect('/teste');
+   res.redirect('/teste');
   });
 });
 
@@ -104,15 +129,11 @@ app.get('/delete/:id', (req, res) => {
   const sql = 'DELETE FROM postg WHERE id = ?';
   db.query(sql, [id], (err, result) => {
     if (err) throw err;
-    res.redirect('/teste');
-  });
+   res.redirect('/teste');
+});
 });
 
 
-
-
-//
-//
 
 
 
@@ -121,6 +142,32 @@ res.send('Credenciais incorretas. <a href="/">Tente novamente</a>');
 }
 });
 });
+
+
+
+app.get('/postagens', (req, res) => {
+ 
+        
+       
+  res.sendFile(__dirname + '/postagens');
+  
+ 
+
+
+     });
+
+     app.get('/blog', (req, res) => {
+ 
+        
+       
+      res.sendFile(__dirname + '/blog');
+      
+     
+    
+    
+         });
+
+
 
 app.get('/dash', (req, res) => {
 
@@ -164,7 +211,7 @@ app.get('/teste', (req, res) => {
 
 app.get('/logout', (req, res) => {
 req.session.destroy(() => {
-es.redirect('/');
+res.redirect('/');
 });
 });
     
@@ -178,4 +225,7 @@ es.redirect('/');
 
 app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
-      });
+  });
+
+
+	
